@@ -1,0 +1,247 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 680" width="100%" height="100%" style="overflow:visible; font-family:'DM Sans', sans-serif;">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="acrylicGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E8FFF0" stop-opacity="0.85"/>
+      <stop offset="50%" stop-color="#CCFFCC" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#96FF96" stop-opacity="0.6"/>
+    </linearGradient>
+    <linearGradient id="algaeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#38E54D" stop-opacity="0.75"/>
+      <stop offset="30%" stop-color="#26DF20" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#148F2A" stop-opacity="0.92"/>
+    </linearGradient>
+    <linearGradient id="solarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E3E62"/>
+      <stop offset="50%" stop-color="#0B192C"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </linearGradient>
+    <linearGradient id="espGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3A4D39"/>
+      <stop offset="100%" stop-color="#1F2E1E"/>
+    </linearGradient>
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    <filter id="sketchShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="2" dy="5" stdDeviation="4" flood-color="#174B32" flood-opacity="0.12"/>
+    </filter>
+    <!-- Arrow marker -->
+    <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#174B32"/>
+    </marker>
+    <marker id="arrowBright" markerWidth="8" markerHeight="8" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#26DF20"/>
+    </marker>
+  </defs>
+
+  <!-- Ambient shadow base -->
+  <ellipse cx="460" cy="590" rx="280" ry="24" fill="#174B32" opacity="0.08"/>
+
+  <!-- ==================== CUBIC ACRYLIC REACTOR (300x300x300mm isometric) ==================== -->
+  <g filter="url(#sketchShadow)" id="reactor-isometric">
+    <!-- Back acrylic walls -->
+    <polygon points="340,240 580,240 680,320 440,320" fill="#CCFFCC" opacity="0.35" stroke="#174B32" stroke-width="1.8" stroke-dasharray="4,2"/>
+    <polygon points="340,240 340,480 440,560 440,320" fill="#E8FFF0" opacity="0.3" stroke="#174B32" stroke-width="1.8" stroke-dasharray="4,2"/>
+
+    <!-- INTERNAL: Culture volume (~21 Litres Chlorella in BG-11) -->
+    <g id="microalgae-culture">
+      <!-- Culture back & body -->
+      <polygon points="345,310 575,310 670,385 440,385" fill="#38E54D" opacity="0.4"/>
+      <!-- Culture main 3D block -->
+      <path d="M 345,310 L 440,385 L 440,550 L 345,475 Z" fill="#20B828" opacity="0.75"/>
+      <path d="M 440,385 L 670,385 L 670,550 L 440,550 Z" fill="url(#algaeGrad)" opacity="0.85"/>
+      <!-- Culture top surface with meniscus wave -->
+      <path d="M 345,310 Q 400,320 440,385 Q 560,375 670,385 Q 580,315 575,310 Z" fill="#6FFF6F" opacity="0.55"/>
+
+      <!-- Central Draft Tube for airlift mixing (proposed) -->
+      <g opacity="0.7">
+        <line x1="510" y1="360" x2="510" y2="520" stroke="#FFFFFF" stroke-width="2.5" stroke-dasharray="5,3"/>
+        <line x1="535" y1="360" x2="535" y2="520" stroke="#FFFFFF" stroke-width="2.5" stroke-dasharray="5,3"/>
+        <!-- Tube top rim -->
+        <ellipse cx="522" cy="360" rx="13" ry="5" fill="none" stroke="#FFFFFF" stroke-width="2"/>
+        <text x="522" y="348" text-anchor="middle" font-size="10" font-family="'IBM Plex Mono', monospace" fill="#174B32" font-weight="600">DRAFT TUBE</text>
+      </g>
+
+      <!-- Rising O2 / Aeration Bubbles -->
+      <g fill="#CCFFCC" opacity="0.8">
+        <circle cx="515" cy="510" r="4.5" stroke="#FFFFFF" stroke-width="1"/>
+        <circle cx="528" cy="495" r="3.5" stroke="#FFFFFF" stroke-width="1"/>
+        <circle cx="518" cy="470" r="5" stroke="#FFFFFF" stroke-width="1.2"/>
+        <circle cx="530" cy="450" r="4" stroke="#FFFFFF" stroke-width="1"/>
+        <circle cx="522" cy="425" r="6" stroke="#FFFFFF" stroke-width="1.2"/>
+        <circle cx="514" cy="395" r="4.5" stroke="#FFFFFF" stroke-width="1"/>
+        <circle cx="527" cy="375" r="5.5" stroke="#FFFFFF" stroke-width="1.2"/>
+        <circle cx="475" cy="460" r="3" opacity="0.6"/>
+        <circle cx="580" cy="480" r="3.5" opacity="0.6"/>
+        <circle cx="610" cy="440" r="2.5" opacity="0.6"/>
+      </g>
+
+      <!-- Ceramic Diffuser at bottom -->
+      <ellipse cx="522" cy="530" rx="22" ry="7" fill="#E0E0E0" stroke="#174B32" stroke-width="1.5"/>
+      <path d="M 500,530 L 500,536 Q 522,544 544,536 L 544,530 Z" fill="#BDBDBD" stroke="#174B32" stroke-width="1.5"/>
+    </g>
+
+    <!-- Transparent Front & Right Acrylic Panels -->
+    <!-- Front Left Face (300 x 300 mm) -->
+    <polygon points="340,240 440,320 440,560 340,480" fill="url(#acrylicGrad)" opacity="0.4" stroke="#174B32" stroke-width="2.2" stroke-linejoin="round"/>
+    <!-- Front Right Face (300 x 300 mm) -->
+    <polygon points="440,320 680,320 680,560 440,560" fill="url(#acrylicGrad)" opacity="0.35" stroke="#174B32" stroke-width="2.2" stroke-linejoin="round"/>
+    <!-- Top Acrylic Lid / Bevel -->
+    <polygon points="340,240 580,240 680,320 440,320" fill="#FFFFFF" opacity="0.3" stroke="#174B32" stroke-width="2.2" stroke-linejoin="round"/>
+
+    <!-- Corner bevel accents & reflection highlights -->
+    <line x1="440" y1="320" x2="440" y2="560" stroke="#FFFFFF" stroke-width="2.5" opacity="0.75"/>
+    <line x1="344" y1="246" x2="436" y2="318" stroke="#FFFFFF" stroke-width="2" opacity="0.6"/>
+    <line x1="446" y1="324" x2="674" y2="324" stroke="#FFFFFF" stroke-width="2" opacity="0.6"/>
+
+    <!-- Magnetic Wiper on Front Wall (FEP Liner Cleaning) -->
+    <g id="magnetic-wiper" transform="translate(425, 430)">
+      <rect x="0" y="0" width="8" height="48" rx="3" fill="#174B32" stroke="#FFFFFF" stroke-width="1"/>
+      <text x="-8" y="28" font-size="9" font-family="'IBM Plex Mono', monospace" fill="#174B32" font-weight="600" text-anchor="end">MAGNETIC WIPER</text>
+      <line x1="-6" y1="25" x2="-1" y2="25" stroke="#174B32" stroke-width="1"/>
+    </g>
+  </g>
+
+  <!-- ==================== SOLAR CANOPY (Two 190x280mm panels) ==================== -->
+  <g id="solar-canopy" filter="url(#sketchShadow)">
+    <!-- Mounting Bracket Struts -->
+    <line x1="370" y1="240" x2="350" y2="160" stroke="#174B32" stroke-width="3" stroke-linecap="round"/>
+    <line x1="510" y1="240" x2="490" y2="155" stroke="#174B32" stroke-width="3" stroke-linecap="round"/>
+    <line x1="650" y1="320" x2="630" y2="185" stroke="#174B32" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- Left Panel 190x280mm angled -->
+    <polygon points="280,140 430,120 470,185 320,205" fill="url(#solarGrad)" stroke="#174B32" stroke-width="2.2" stroke-linejoin="round"/>
+    <!-- Photovoltaic Grid Lines Panel 1 -->
+    <line x1="330" y1="133" x2="370" y2="198" stroke="#5C88C4" stroke-width="1.2" opacity="0.8"/>
+    <line x1="380" y1="126" x2="420" y2="191" stroke="#5C88C4" stroke-width="1.2" opacity="0.8"/>
+    <line x1="300" y1="172" x2="450" y2="152" stroke="#5C88C4" stroke-width="1.2" opacity="0.8"/>
+
+    <!-- Right Panel 190x280mm angled -->
+    <polygon points="450,118 600,100 640,165 490,183" fill="url(#solarGrad)" stroke="#174B32" stroke-width="2.2" stroke-linejoin="round"/>
+    <!-- Photovoltaic Grid Lines Panel 2 -->
+    <line x1="500" y1="112" x2="540" y2="177" stroke="#5C88C4" stroke-width="1.2" opacity="0.8"/>
+    <line x1="550" y1="105" x2="590" y2="170" stroke="#5C88C4" stroke-width="1.2" opacity="0.8"/>
+    <line x1="470" y1="150" x2="620" y2="132" stroke="#5C88C4" stroke-width="1.2" opacity="0.8"/>
+  </g>
+
+  <!-- ==================== ESP32 CONTROLLER ENCLOSURE & AERATION PUMP ==================== -->
+  <g id="controller-and-pump">
+    <!-- ESP32 Enclosure (mounted on left bracket) -->
+    <g filter="url(#sketchShadow)" transform="translate(230, 370)">
+      <rect x="0" y="0" width="75" height="100" rx="6" fill="url(#espGrad)" stroke="#174B32" stroke-width="2"/>
+      <rect x="8" y="8" width="59" height="32" rx="3" fill="#14EF10" opacity="0.15" stroke="#14EF10" stroke-width="1"/>
+      <text x="37" y="24" text-anchor="middle" font-size="11" font-family="'Barlow Semi Condensed', sans-serif" font-weight="700" fill="#26DF20" letter-spacing="1">ESP32 IoT</text>
+      <text x="37" y="34" text-anchor="middle" font-size="8" font-family="'IBM Plex Mono', monospace" fill="#CCFFCC">CONTROLLER</text>
+      <!-- Blinking / active LED status dots -->
+      <circle cx="20" cy="55" r="3.5" fill="#14EF10" filter="url(#softGlow)"/>
+      <circle cx="36" cy="55" r="3" fill="#26DF20"/>
+      <circle cx="52" cy="55" r="3" fill="#6FFF6F" opacity="0.7"/>
+      <!-- Wi-Fi / Wire gland connector -->
+      <rect x="25" y="100" width="25" height="12" rx="2" fill="#174B32"/>
+      <!-- Small Antenna -->
+      <line x1="65" y1="0" x2="72" y2="-18" stroke="#174B32" stroke-width="2.5" stroke-linecap="round"/>
+      <circle cx="73" cy="-20" r="3" fill="#26DF20"/>
+    </g>
+
+    <!-- DC Aeration Pump Unit -->
+    <g filter="url(#sketchShadow)" transform="translate(245, 500)">
+      <rect x="0" y="0" width="60" height="42" rx="5" fill="#FAF7EF" stroke="#174B32" stroke-width="2"/>
+      <text x="30" y="18" text-anchor="middle" font-size="9.5" font-family="'Barlow Semi Condensed', sans-serif" font-weight="700" fill="#174B32">DC PUMP</text>
+      <text x="30" y="30" text-anchor="middle" font-size="8" font-family="'IBM Plex Mono', monospace" fill="#28312A">12V PWM</text>
+    </g>
+
+    <!-- Air Tubing: Ambient Room Air -> Pump -> Diffuser -->
+    <!-- Room Air Intake -->
+    <path d="M 180,520 L 245,520" fill="none" stroke="#174B32" stroke-width="2.5" stroke-dasharray="4,3" marker-end="url(#arrowGreen)"/>
+    <text x="175" y="515" font-size="10" font-family="'Barlow Semi Condensed', sans-serif" font-weight="600" fill="#174B32" text-anchor="end">ROOM AIR INLET</text>
+
+    <!-- Pump to Diffuser line -->
+    <path d="M 305,520 Q 400,550 500,534" fill="none" stroke="#26DF20" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- Wiring Conduit from ESP32 to Sensors -->
+    <path d="M 305,420 Q 370,410 440,370" fill="none" stroke="#174B32" stroke-width="2" stroke-dasharray="3,2"/>
+  </g>
+
+  <!-- ==================== SENSORS & CALLOUT LABELS ==================== -->
+  <!-- 1. Ambient Light Sensor (BH1750) -->
+  <g id="callout-bh1750">
+    <circle cx="510" cy="230" r="5" fill="#14EF10" stroke="#174B32" stroke-width="1.5" filter="url(#softGlow)"/>
+    <line x1="510" y1="230" x2="560" y2="190" stroke="#174B32" stroke-width="1.2" stroke-dasharray="3,2"/>
+    <line x1="560" y1="190" x2="680" y2="190" stroke="#174B32" stroke-width="1.2"/>
+    <rect x="680" y="176" width="165" height="26" rx="4" fill="#FAF7EF" stroke="#174B32" stroke-width="1.2"/>
+    <text x="690" y="193" font-size="11" font-family="'Barlow Semi Condensed', sans-serif" font-weight="700" fill="#174B32">BH1750 LIGHT SENSOR</text>
+    <text x="836" y="193" font-size="9" font-family="'IBM Plex Mono', monospace" fill="#26DF20" text-anchor="end">LUX</text>
+  </g>
+
+  <!-- 2. Dual NDIR CO2 Sensor - Outlet -->
+  <g id="callout-co2-out">
+    <ellipse cx="610" cy="280" rx="7" ry="5" fill="#26DF20" stroke="#174B32" stroke-width="1.5"/>
+    <path d="M 610,275 L 610,250 Q 610,240 630,240 L 720,240" fill="none" stroke="#174B32" stroke-width="1.5" marker-end="url(#arrowGreen)"/>
+    <rect x="720" y="226" width="180" height="28" rx="4" fill="#FAF7EF" stroke="#174B32" stroke-width="1.2"/>
+    <text x="730" y="244" font-size="11" font-family="'Barlow Semi Condensed', sans-serif" font-weight="700" fill="#174B32">NDIR CO₂ OUTLET SENSOR</text>
+  </g>
+
+  <!-- 3. Dual NDIR CO2 Sensor - Inlet -->
+  <g id="callout-co2-in">
+    <circle cx="215" cy="520" r="5" fill="#26DF20" stroke="#174B32" stroke-width="1.5"/>
+    <line x1="215" y1="520" x2="160" y2="470" stroke="#174B32" stroke-width="1.2" stroke-dasharray="3,2"/>
+    <line x1="160" y1="470" x2="60" y2="470" stroke="#174B32" stroke-width="1.2"/>
+    <rect x="15" y="456" width="165" height="26" rx="4" fill="#FAF7EF" stroke="#174B32" stroke-width="1.2"/>
+    <text x="25" y="473" font-size="11" font-family="'Barlow Semi Condensed', sans-serif" font-weight="700" fill="#174B32">NDIR CO₂ INLET SENSOR</text>
+  </g>
+
+  <!-- 4. Submerged pH Sensor Probe -->
+  <g id="callout-ph">
+    <!-- Probe body dipping into culture -->
+    <rect x="470" y="300" width="8" height="65" rx="3" fill="#174B32" stroke="#FFFFFF" stroke-width="1"/>
+    <circle cx="474" cy="365" r="4" fill="#26DF20"/>
+    <line x1="474" y1="320" x2="430" y2="280" stroke="#174B32" stroke-width="1.2" stroke-dasharray="3,2"/>
+    <line x1="430" y1="280" x2="220" y2="280" stroke="#174B32" stroke-width="1.2"/>
+    <rect x="110" y="266" width="130" height="26" rx="4" fill="#FAF7EF" stroke="#174B32" stroke-width="1.2"/>
+    <text x="120" y="283" font-size="11" font-family="'Barlow Semi Condensed', sans-serif" font-weight="700" fill="#174B32">pH PROBE (ANALOG)</text>
+  </g>
+
+  <!-- 5. DS18B20 Waterproof Temperature Sensor -->
+  <g id="callout-temp">
+    <line x1="590" y1="315" x2="590" y2="430" stroke="#174B32" stroke-width="2.5" stroke-linecap="round"/>
+    <rect x="587" y="420" width="6" height="18" rx="2" fill="#E0E0E0" stroke="#174B32" stroke-width="1"/>
+    <line x1="590" y1="400" x2="720" y2="400" stroke="#174B32" stroke-width="1.2" stroke-dasharray="3,2"/>
+    <rect x="720" y="386" width="175" height="26" rx="4" fill="#FAF7EF" stroke="#174B32" stroke-width="1.2"/>
+    <text x="730" y="403" font-size="11" font-family="'Barlow Semi Condensed', sans-serif" font-weight="700" fill="#174B32">DS18B20 TEMPERATURE</text>
+  </g>
+
+  <!-- 6. Optical Turbidity Sensor -->
+  <g id="callout-turbidity">
+    <circle cx="630" cy="480" r="6" fill="#14EF10" stroke="#174B32" stroke-width="1.5"/>
+    <line x1="630" y1="480" x2="720" y2="480" stroke="#174B32" stroke-width="1.2" stroke-dasharray="3,2"/>
+    <rect x="720" y="466" width="180" height="26" rx="4" fill="#FAF7EF" stroke="#174B32" stroke-width="1.2"/>
+    <text x="730" y="483" font-size="11" font-family="'Barlow Semi Condensed', sans-serif" font-weight="700" fill="#174B32">OPTICAL TURBIDITY SENSOR</text>
+  </g>
+
+  <!-- 7. TCS34725 RGB Colour Sensor -->
+  <g id="callout-color">
+    <rect x="668" y="515" width="10" height="14" rx="2" fill="#174B32" stroke="#26DF20" stroke-width="1"/>
+    <line x1="675" y1="535" x2="720" y2="550" stroke="#174B32" stroke-width="1.2" stroke-dasharray="3,2"/>
+    <rect x="720" y="538" width="180" height="26" rx="4" fill="#FAF7EF" stroke="#174B32" stroke-width="1.2"/>
+    <text x="730" y="555" font-size="11" font-family="'Barlow Semi Condensed', sans-serif" font-weight="700" fill="#174B32">TCS34725 COLOUR SENSOR</text>
+  </g>
+
+  <!-- ==================== EDITORIAL ANNOTATIONS ==================== -->
+  <!-- Dimension callout (300 x 300 x 300 mm) -->
+  <g id="dim-callout" opacity="0.85">
+    <line x1="335" y1="485" x2="335" y2="570" stroke="#174B32" stroke-width="1"/>
+    <line x1="435" y1="565" x2="435" y2="600" stroke="#174B32" stroke-width="1"/>
+    <line x1="685" y1="565" x2="685" y2="600" stroke="#174B32" stroke-width="1"/>
+    <!-- Bottom dimension line -->
+    <line x1="435" y1="590" x2="685" y2="590" stroke="#174B32" stroke-width="1.2" marker-start="url(#arrowGreen)" marker-end="url(#arrowGreen)"/>
+    <text x="560" y="612" text-anchor="middle" font-size="10.5" font-family="'IBM Plex Mono', monospace" font-weight="600" fill="#174B32">300 mm CUBIC TANK (~21 L CULTURE)</text>
+  </g>
+
+  <!-- Top Solar callout -->
+  <g id="solar-callout" opacity="0.85">
+    <text x="560" y="80" text-anchor="middle" font-size="11" font-family="'Barlow Semi Condensed', sans-serif" font-weight="700" fill="#174B32" letter-spacing="0.5">DUAL 190 x 280 mm SOLAR CANOPY</text>
+    <line x1="560" y1="85" x2="560" y2="98" stroke="#174B32" stroke-width="1.2"/>
+  </g>
+</svg>

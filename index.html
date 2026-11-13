@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>EcoBreathe Liquid Tree — Compact Microalgae Photobioreactor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="EcoBreathe Liquid Tree: Compact self-monitoring microalgae photobioreactor for biological carbon capture. Vishwakarma Awards 2026–27.">
+  <link rel="stylesheet" href="style.css">
+  <!-- QRCode.js -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
+</head>
+<body>
+
+  <!-- ==================== NAVIGATION BAR ==================== -->
+  <header class="navbar" id="site-navbar">
+    <div class="nav-container">
+      <a href="#/" class="brand" data-route="#/">
+        <div class="brand-icon">
+          <!-- Bio Reactor Vector Icon (No emojis) -->
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v8"/>
+            <path d="M4 10a8 8 0 0 0 16 0V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v4z"/>
+            <line x1="8" y1="14" x2="8" y2="17"/>
+            <line x1="12" y1="12" x2="12" y2="18"/>
+            <line x1="16" y1="13" x2="16" y2="16"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          EcoBreathe <span class="brand-subtitle">LIQUID TREE</span>
+        </div>
+      </a>
+
+      <nav>
+        <ul class="nav-links">
+          <li class="nav-item">
+            <a href="#/" class="nav-link" data-route="#/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="#/conditions" class="nav-link" data-route="#/conditions">Current Conditions</a>
+          </li>
+          <li class="nav-item">
+            <a href="#/whats-next" class="nav-link" data-route="#/whats-next">What's Next</a>
+          </li>
+          <li class="nav-item">
+            <a href="#/maintenance/EcoBreathe-01" class="nav-link" data-route="#/maintenance/EcoBreathe-01">Maintenance</a>
+          </li>
+          <li class="nav-item">
+            <a href="#/login" class="nav-link nav-auth-btn" data-route="#/login">Login</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ==================== MAIN CONTENT OUTLET ==================== -->
+  <main class="main-content" id="app-root"></main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div>
+        <div class="footer-brand-text">EcoBreathe Liquid Tree</div>
+        <div class="footer-desc">
+          Compact, self-monitoring microalgae photobioreactor engineered for measurable biological carbon capture in domestic and institutional spaces.
+        </div>
+      </div>
+      <ul class="footer-links">
+        <li><a href="#/" data-route="#/">Home</a></li>
+        <li><a href="#/conditions" data-route="#/conditions">Current Conditions</a></li>
+        <li><a href="#/whats-next" data-route="#/whats-next">What's Next</a></li>
+        <li><a href="#/maintenance/EcoBreathe-01" data-route="#/maintenance/EcoBreathe-01">Maintenance</a></li>
+        <li><a href="#/login" data-route="#/login">Login</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- ==================== CLIENT APPLICATION LOGIC ==================== -->
+  <script>
+    // Global State
+    let currentMode = 'demo'; // 'demo' | 'live'
+    let currentScenario = 'normal'; // 'normal' | 'stress' | 'anomaly'
+    let currentUserRole = localStorage.getItem('ecobreathe_user_role') || 'Guest Operator';
+
+    // Demo Scenario Telemetry Datasets
+    const telemetryScenarios = {
+      normal: {
+        label: 'Normal Operation',
+        status: 'Normal',
+        statusPillClass: 'pill-normal',
+        dotClass: 'dot-green',
+        summary: 'Photobioreactor operating inside nominal bounds. Stable photosynthetic uptake.',
+        co2In: 425,
+        co2Out: 380,
+        sensors: {
+          ph: { name: 'pH Level', probe: 'Analog pH Probe', val: '8.22', unit: '', status: 'Nominal', pill: 'pill-normal', note: 'Within provisional BG-11 range (7.8–8.6).', history: [8.12, 8.16, 8.19, 8.21, 8.20, 8.22] },
+          temp: { name: 'Culture Temperature', probe: 'DS18B20 1-Wire', val: '24.4', unit: '°C', status: 'Nominal', pill: 'pill-normal', note: 'Optimal range for Chlorella vulgaris (22–26°C).', history: [23.8, 24.0, 24.1, 24.3, 24.5, 24.4] },
+          turbidity: { name: 'Culture Turbidity', probe: 'Optical Turbidity', val: '46.2', unit: 'NTU', status: 'Growing', pill: 'pill-normal', note: 'Steady upward optical density reflecting healthy cell division.', history: [38.0, 40.2, 42.1, 44.5, 45.8, 46.2] },
+          color: { name: 'Biomass Colour Index', probe: 'TCS34725 RGB', val: '1240', unit: 'idx', status: 'Vibrant Green', pill: 'pill-normal', note: 'Green wavelength predominance confirms high chlorophyll absorption.', history: [1160, 1180, 1205, 1220, 1235, 1240] },
+          light: { name: 'Ambient Light Intensity', probe: 'BH1750 Lux', val: '365', unit: 'lux', status: 'Adequate', pill: 'pill-normal', note: 'Supplemental LED duty idle; ambient light satisfies light budget.', history: [340, 355, 360, 362, 368, 365] },
+          aeration: { name: 'Aeration Pump Duty', probe: 'PWM DC Aeration', val: '45', unit: '%', status: 'Standard Duty', pill: 'pill-normal', note: 'Airlift draft circulation steady; 12V diaphragm pump active.', history: [45, 45, 45, 45, 45, 45] }
+        },
+        ai: {
+          biofingerprint: 'Current sensor readings track within 1.8% of historical baseline model.',
+          trajectory: 'Estimated biomass productivity on track for 0.08–0.12 g/L/day range.',
+          rootCause: 'No multi-variable divergence detected. Aeration duty calibrated.',
+          reliability: 'All 6 sensor channels reporting continuous, dynamic, plausible voltages.'
+        }
+      },
+      stress: {
+        label: 'Possible Culture Stress',
+        status: 'Needs Attention',
+        statusPillClass: 'pill-warn',
+        dotClass: 'dot-yellow',
+        summary: 'Elevated pH detected with plateauing optical density. Aeration boost advised.',
+        co2In: 432,
+        co2Out: 418,
+        sensors: {
+          ph: { name: 'pH Level', probe: 'Analog pH Probe', val: '9.24', unit: '', status: 'High Alkaline', pill: 'pill-warn', note: 'pH drifted above 9.0; indicates carbon limitation or intense fixation.', history: [8.55, 8.78, 8.95, 9.10, 9.18, 9.24] },
+          temp: { name: 'Culture Temperature', probe: 'DS18B20 1-Wire', val: '27.8', unit: '°C', status: 'Slightly Warm', pill: 'pill-warn', note: 'Ambient warmth increasing liquid temperature near upper limit.', history: [25.0, 25.8, 26.5, 27.1, 27.5, 27.8] },
+          turbidity: { name: 'Culture Turbidity', probe: 'Optical Turbidity', val: '68.5', unit: 'NTU', status: 'Plateaued', pill: 'pill-warn', note: 'Cell density growth rate has flattened over the past 36 hours.', history: [62.0, 65.5, 67.8, 68.2, 68.4, 68.5] },
+          color: { name: 'Biomass Colour Index', probe: 'TCS34725 RGB', val: '1380', unit: 'idx', status: 'Yellow Shift', pill: 'pill-warn', note: 'Subtle yellow-green spectral shift suggests early nitrogen depletion.', history: [1260, 1290, 1320, 1350, 1370, 1380] },
+          light: { name: 'Ambient Light Intensity', probe: 'BH1750 Lux', val: '480', unit: 'lux', status: 'High Radiance', pill: 'pill-normal', note: 'High ambient solar radiance from canopy orientation.', history: [410, 435, 450, 465, 475, 480] },
+          aeration: { name: 'Aeration Pump Duty', probe: 'PWM DC Aeration', val: '75', unit: '%', status: 'Elevated Duty', pill: 'pill-warn', note: 'ESP32 automated control rule boosted pump duty to lower pH.', history: [45, 50, 60, 70, 75, 75] }
+        },
+        ai: {
+          biofingerprint: 'Variance detected: pH trend is 2.4 sigma above expected baseline curve.',
+          trajectory: 'Culture entering decelerated phase. Nutrient or gas limitation likely.',
+          rootCause: 'Confidence 84%: Elevated pH combined with reduced ΔCO₂ suggests CO₂ diffusion rate is lagging biological demand.',
+          reliability: 'All sensors responding dynamically. No hardware malfunction detected.'
+        }
+      },
+      anomaly: {
+        label: 'Sensor Anomaly',
+        status: 'Sensor Warning',
+        statusPillClass: 'pill-alert',
+        dotClass: 'dot-red',
+        summary: 'Turbidity sensor flatline and NDIR reading discontinuity flagged for review.',
+        co2In: 420,
+        co2Out: 422,
+        sensors: {
+          ph: { name: 'pH Level', probe: 'Analog pH Probe', val: '8.18', unit: '', status: 'Nominal', pill: 'pill-normal', note: 'Electrochemical potential stable across last sample window.', history: [8.18, 8.18, 8.18, 8.18, 8.18, 8.18] },
+          temp: { name: 'Culture Temperature', probe: 'DS18B20 1-Wire', val: '24.2', unit: '°C', status: 'Nominal', pill: 'pill-normal', note: 'Thermal reading steady.', history: [24.1, 24.2, 24.2, 24.2, 24.3, 24.2] },
+          turbidity: { name: 'Culture Turbidity', probe: 'Optical Turbidity', val: '45.0', unit: 'NTU', status: 'Flatlined', pill: 'pill-alert', note: 'Unchanging voltage over 6 consecutive cycles. Inspect optical path.', history: [45.0, 45.0, 45.0, 45.0, 45.0, 45.0] },
+          color: { name: 'Biomass Colour Index', probe: 'TCS34725 RGB', val: '1210', unit: 'idx', status: 'Nominal', pill: 'pill-normal', note: 'RGB spectral ratio standard.', history: [1208, 1210, 1210, 1211, 1210, 1210] },
+          light: { name: 'Ambient Light Intensity', probe: 'BH1750 Lux', val: '350', unit: 'lux', status: 'Nominal', pill: 'pill-normal', note: 'I2C lux reading valid.', history: [348, 350, 350, 351, 350, 350] },
+          aeration: { name: 'Aeration Pump Duty', probe: 'PWM DC Aeration', val: '45', unit: '%', status: 'Standard Duty', pill: 'pill-normal', note: 'Diaphragm pump operating at standard pulse width.', history: [45, 45, 45, 45, 45, 45] }
+        },
+        ai: {
+          biofingerprint: 'Sensor anomaly detected: Turbidity variance equals 0.00 NTU over 4 hours.',
+          trajectory: 'Trajectory prediction paused until optical calibration is restored.',
+          rootCause: 'Confidence 92%: Turbidity optical window may be bio-fouled or ADC pin loose. NDIR outlet sensor reading inversion indicates drift.',
+          reliability: 'CRITICAL: Flagged Optical Turbidity probe and Outlet NDIR sensor for recalibration.'
+        }
+      }
+    };
+
+    // Helper: generate standalone inline SVG sparkline
+    function renderSparklineSVG(dataPoints, isAlert = false) {
+      if (!dataPoints || dataPoints.length < 2) return '';
+      const w = 220;
+      const h = 40;
+      const min = Math.min(...dataPoints);
+      const max = Math.max(...dataPoints);
+      const range = (max - min) === 0 ? 1 : (max - min);
+
+      const pts = dataPoints.map((val, idx) => {
+        const x = (idx / (dataPoints.length - 1)) * (w - 16) + 8;
+        const y = h - 8 - ((val - min) / range) * (h - 16);
+        return { x: x.toFixed(1), y: y.toFixed(1), val };
+      });
+
+      const lineD = pts.reduce((acc, pt, i) => `${acc} ${i === 0 ? 'M' : 'L'} ${pt.x},${pt.y}`, '');
+      const areaD = `${lineD} L ${pts[pts.length - 1].x},${h - 4} L ${pts[0].x},${h - 4} Z`;
+      const strokeColor = isAlert ? '#EF4444' : '#26DF20';
+      const fillColor = isAlert ? 'rgba(239, 68, 68, 0.15)' : 'rgba(38, 223, 32, 0.15)';
+
+      return `
+        <svg viewBox="0 0 ${w} ${h}" width="100%" height="100%" preserveAspectRatio="none" style="overflow:visible;">
+          <path d="${areaD}" fill="${fillColor}" />
+          <path d="${lineD}" fill="none" stroke="${strokeColor}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          ${pts.map(pt => `<circle cx="${pt.x}" cy="${pt.y}" r="2.8" fill="#174B32" stroke="${strokeColor}" stroke-width="1.5"/>`).join('')}
+        </svg>
+      `;
+    }
+
+    // ==================== PAGE RENDERERS ====================
+
+    // 1. LANDING PAGE
+    function renderHomePage() {
+      return `
+        <div class="landing-wrapper">
+          <!-- Floating ambient bubbles -->
+          <div class="hero-bubbles-container" aria-hidden="true">
+            <div class="bubble b1"></div>
+            <div class="bubble b2"></div>
+            <div class="bubble b3"></div>
+            <div class="bubble b4"></div>
+            <div class="bubble b5"></div>
+            <div class="bubble b6"></div>
+          </div>
+
+          <!-- Hero Section -->
+          <section class="hero-section">
+            <div class="container hero-grid">
+              <div class="hero-content-col">
+                <div class="hero-kicker">
+                  <span class="dot-indicator dot-green"></span>
+                  Vishwakarma Awards 2026–27 | Stage 2 Prototype
+                </div>
+                <h1 class="hero-title">Making biological carbon capture visible.</h1>
+                <p class="hero-description">
+                  An intelligent, compact microalgae photobioreactor that captures CO₂, monitors its biological environment and makes its performance measurable.
+                </p>
+                <div class="hero-actions">
+                  <a href="#reactor-drawing" class="btn btn-primary" id="btn-explore-reactor">
+                    Explore the Reactor
+                  </a>
+                  <a href="#/conditions" class="btn btn-secondary" data-route="#/conditions">
+                    View Current Conditions
+                  </a>
+                </div>
+                <div class="hero-specs-strip">
+                  <div class="hero-spec-item">
+                    <span class="hero-spec-val mono">~21 L</span>
+                    <span class="hero-spec-lbl">Culture volume</span>
+                  </div>
+                  <div class="hero-spec-item">
+                    <span class="hero-spec-val mono">300 mm³</span>
+                    <span class="hero-spec-lbl">Cubic acrylic tank</span>
+                  </div>
+                  <div class="hero-spec-item">
+                    <span class="hero-spec-val mono">Chlorella</span>
+                    <span class="hero-spec-lbl">In BG-11 medium</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Hand-drawn style technical reactor illustration -->
+              <div class="reactor-frame" id="reactor-drawing">
+                <div class="reactor-frame-header">
+                  <div class="reactor-frame-title">
+                    <span class="dot-indicator dot-green"></span>
+                    TECHNICAL SYSTEM SCHEMATIC
+                  </div>
+                  <div class="reactor-frame-caption mono">FIGURE 01 • OPENSCAD REFERENCE</div>
+                </div>
+                <div class="reactor-svg-wrapper">
+                  <img src="reactor.svg" alt="EcoBreathe Liquid Tree hand-drawn technical reactor illustration showing cubic tank, Chlorella culture, solar canopy, ESP32 controller, and sensor inputs" />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- How does EcoBreathe work? (Two Connected Loops) -->
+          <section class="section-works">
+            <div class="container">
+              <div class="section-header">
+                <span class="section-kicker">DUAL CYCLIC ARCHITECTURE</span>
+                <h2 class="section-title">How does EcoBreathe work?</h2>
+                <p class="section-desc">
+                  EcoBreathe unites living microalgae biology with an autonomous low-power IoT telemetry loop.
+                </p>
+              </div>
+
+              <div class="loops-grid">
+                <!-- Loop 1: Biological -->
+                <div class="loop-card">
+                  <span class="loop-tag loop-tag-bio mono">CYCLE 01 • LIVING SYSTEM</span>
+                  <h3 class="loop-title">The Biological Loop</h3>
+                  <p class="loop-p">
+                    Microalgae (principally <em>Chlorella</em>, with <em>Neochloris</em> strains maintained) utilize dissolved CO₂ and photon energy from natural or supplemental lighting to synthesize biomass through natural oxygenic photosynthesis.
+                  </p>
+                  <ul class="loop-flow">
+                    <li class="loop-flow-step">
+                      <span class="step-num">1</span>
+                      <span>Room air enters through dust pre-filter</span>
+                    </li>
+                    <li class="loop-flow-step">
+                      <span class="step-num">2</span>
+                      <span>DC air pump feeds submerged porous diffuser</span>
+                    </li>
+                    <li class="loop-flow-step">
+                      <span class="step-num">3</span>
+                      <span>Airlift draft tube drives fluid mixing & gas exchange</span>
+                    </li>
+                    <li class="loop-flow-step">
+                      <span class="step-num">4</span>
+                      <span>Chlorella fixes CO₂; oxygen-enriched air exits exhaust</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <!-- Loop 2: Energy & Data -->
+                <div class="loop-card">
+                  <span class="loop-tag loop-tag-tech mono">CYCLE 02 • TELEMETRY & POWER</span>
+                  <h3 class="loop-title">Energy and Data Loop</h3>
+                  <p class="loop-p">
+                    Two angled solar panels provide supplemental power. The onboard ESP32 controller samples six input streams, regulates illumination and aeration, and streams telemetry via Wi-Fi to a real-time database.
+                  </p>
+                  <ul class="loop-flow">
+                    <li class="loop-flow-step">
+                      <span class="step-num">1</span>
+                      <span>Dual 190 × 280 mm solar canopy charges onboard buffer</span>
+                    </li>
+                    <li class="loop-flow-step">
+                      <span class="step-num">2</span>
+                      <span>ESP32 controller samples 6 multi-parameter sensor feeds</span>
+                    </li>
+                    <li class="loop-flow-step">
+                      <span class="step-num">3</span>
+                      <span>Automated rules balance pH and light duration budgets</span>
+                    </li>
+                    <li class="loop-flow-step">
+                      <span class="step-num">4</span>
+                      <span>Telemetry streams to cloud database & analytics dashboard</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- How to use this website (4 Distinct Steps) -->
+          <section class="section-guide">
+            <div class="container">
+              <div class="section-header">
+                <span class="section-kicker">ORIENTATION</span>
+                <h2 class="section-title">How to use this website</h2>
+                <p class="section-desc">
+                  Explore the project from high-level biotechnology concepts down to real-time telemetry and technician servicing passports.
+                </p>
+              </div>
+
+              <div class="guide-grid">
+                <a href="#/" class="guide-card" data-route="#/">
+                  <div class="guide-num">01</div>
+                  <div class="guide-icon icon-home">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                  </div>
+                  <h4 class="guide-title">Home</h4>
+                  <p class="guide-text">Understand the photobioreactor geometry, dual-loop mechanism, and physical award specifications.</p>
+                </a>
+
+                <a href="#/conditions" class="guide-card" data-route="#/conditions">
+                  <div class="guide-num">02</div>
+                  <div class="guide-icon icon-cond">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+                  </div>
+                  <h4 class="guide-title">Current Conditions</h4>
+                  <p class="guide-text">Inspect real-time dual NDIR CO₂ differentials, pH, optical turbidity trends, and BioFingerprint AI analysis.</p>
+                </a>
+
+                <a href="#/whats-next" class="guide-card" data-route="#/whats-next">
+                  <div class="guide-num">03</div>
+                  <div class="guide-icon icon-next">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  </div>
+                  <h4 class="guide-title">What's Next</h4>
+                  <p class="guide-text">Review prioritized maintenance recommendations, editable inspection dates, and the 4-month development roadmap.</p>
+                </a>
+
+                <a href="#/maintenance/EcoBreathe-01" class="guide-card" data-route="#/maintenance/EcoBreathe-01">
+                  <div class="guide-num">04</div>
+                  <div class="guide-icon icon-maint">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                  </div>
+                  <h4 class="guide-title">Maintenance</h4>
+                  <p class="guide-text">Scan panel QR codes on-site, download passports, and log servicing actions directly to the digital record.</p>
+                </a>
+              </div>
+            </div>
+          </section>
+
+          <!-- Specifications and Performance Transparency -->
+          <section class="section-specs">
+            <div class="container specs-grid">
+              <div>
+                <span class="section-kicker">PHYSICAL SYSTEM SHEET</span>
+                <h3 class="section-title" style="font-size:2.1rem; margin-bottom:1.25rem;">Reactor Specifications</h3>
+                <table class="specs-table">
+                  <tbody>
+                    <tr>
+                      <th>Reactor Body</th>
+                      <td>Transparent Acrylic Cube (300 × 300 × 300 mm)</td>
+                    </tr>
+                    <tr>
+                      <th>Culture Volume</th>
+                      <td>Approx. 21.0 Litres working volume</td>
+                    </tr>
+                    <tr>
+                      <th>Primary Organism</th>
+                      <td>Chlorella vulgaris (Neochloris auxiliary stock)</td>
+                    </tr>
+                    <tr>
+                      <th>Nutrient Medium</th>
+                      <td>BG-11 synthetic freshwater formulation</td>
+                    </tr>
+                    <tr>
+                      <th>Controller Core</th>
+                      <td>Espressif ESP32 dual-core Wi-Fi / BLE MCU</td>
+                    </tr>
+                    <tr>
+                      <th>Solar Canopy</th>
+                      <td>Two 190 × 280 mm monocrystalline panels</td>
+                    </tr>
+                    <tr>
+                      <th>Gas & Fluidics</th>
+                      <td>DC diaphragm air pump & bottom micro-diffuser</td>
+                    </tr>
+                    <tr>
+                      <th>Mixing Mechanism</th>
+                      <td>Proposed central airlift draft tube</td>
+                    </tr>
+                    <tr>
+                      <th>Biofilm Control</th>
+                      <td>Proposed FEP non-stick liner & magnetic wiper</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Performance Transparency Section -->
+              <div class="transparency-card">
+                <span class="transparency-tag mono">Stage 2 Performance Transparency</span>
+                <h4 style="font-size:1.45rem; color:var(--color-dark-forest); margin-bottom:0.5rem;">Estimated Carbon Capture</h4>
+                <p style="font-size:0.92rem; color:var(--color-charcoal);">
+                  Calculated based on standard photobioreactor kinetics for Stage 2 submission. Physical sensor calibration and 21-day validation runs are upcoming.
+                </p>
+
+                <div class="transparency-metrics">
+                  <div class="t-metric">
+                    <div class="t-val mono">0.05 – 0.15 g / L / day</div>
+                    <div class="t-lbl">Estimated Biomass Productivity (Provisional)</div>
+                  </div>
+                  <div class="t-metric">
+                    <div class="t-val mono">~ 1.8 g CO₂ / g biomass</div>
+                    <div class="t-lbl">Theoretical Stoichiometric CO₂ Fixation</div>
+                  </div>
+                  <div class="t-metric">
+                    <div class="t-val mono">2 – 6 g CO₂ / day</div>
+                    <div class="t-lbl">Estimated Daily Capture per Unit (Provisional)</div>
+                  </div>
+                </div>
+
+                <div class="disclaimer-box">
+                  <strong>Scientific Honesty Note:</strong> These figures represent biological models, not yet experimentally validated sensor measurements. The goal is a tangible, measurable demonstration of localized carbon capture rather than unrealistic claims of whole-room purification.
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      `;
+    }
+
+    // 2. CURRENT CONDITIONS DASHBOARD
+    function renderConditionsPage() {
+      const activeData = telemetryScenarios[currentScenario];
+      const isLive = (currentMode === 'live');
+
+      return `
+        <div class="dash-page container">
+          <!-- Dashboard Header -->
+          <div class="dash-header">
+            <div>
+              <div style="display:flex; align-items:center; gap:0.6rem; margin-bottom:0.25rem;">
+                <h1 class="dash-header-title">EcoBreathe / Panel 01</h1>
+                <span class="pill ${isLive ? 'pill-live-off' : activeData.statusPillClass}">
+                  <span class="dot-indicator ${isLive ? 'dot-gray' : activeData.dotClass}"></span>
+                  ${isLive ? 'Awaiting Data' : activeData.status}
+                </span>
+                <span class="pill ${isLive ? 'pill-live-off' : 'pill-demo'}">
+                  ${isLive ? 'LIVE MODE (DISCONNECTED)' : 'DEMO MODE'}
+                </span>
+              </div>
+              <div class="dash-meta">
+                <span>Hardware: <strong>ESP32 Rev 1</strong></span>
+                <span>•</span>
+                <span>Panel ID: <strong class="mono">EB-PANEL-01-VISHWA</strong></span>
+                <span>•</span>
+                <span>Last Updated: <strong class="mono">${new Date().toLocaleTimeString()}</strong></span>
+              </div>
+            </div>
+
+            <!-- Mode Selector & Controls -->
+            <div class="dash-controls">
+              <div class="mode-toggle-group">
+                <button class="mode-btn ${!isLive ? 'active' : ''}" id="btn-mode-demo">DEMO MODE</button>
+                <button class="mode-btn ${isLive ? 'active' : ''}" id="btn-mode-live">LIVE DATA</button>
+              </div>
+            </div>
+          </div>
+
+          ${isLive ? `
+            <!-- Live Data Honest Notice -->
+            <div class="live-unavailable-banner">
+              <div class="live-banner-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              </div>
+              <div>
+                <div class="live-banner-title">Live Hardware Stream Not Yet Connected</div>
+                <p class="live-banner-p">
+                  Live data is not currently available. Sensor circuits have been simulated and the ESP32 firmware integration is currently underway in our project development schedule. We do not fabricate live sensor readings.
+                </p>
+                <p class="live-banner-p" style="margin-top:0.35rem;">
+                  Please switch back to <strong>DEMO MODE</strong> to inspect the simulated sensor dashboard and AI diagnostic routines.
+                </p>
+              </div>
+            </div>
+          ` : `
+            <!-- Demo Scenario Selector -->
+            <div class="scenario-bar">
+              <div class="scenario-label">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                Select Simulated Scenario:
+              </div>
+              <div class="scenario-pills">
+                <button class="scenario-pill-btn ${currentScenario === 'normal' ? 'active' : ''}" data-scenario="normal">
+                  Scenario A: Normal Operation
+                </button>
+                <button class="scenario-pill-btn ${currentScenario === 'stress' ? 'active' : ''}" data-scenario="stress">
+                  Scenario B: Culture Stress (High pH)
+                </button>
+                <button class="scenario-pill-btn ${currentScenario === 'anomaly' ? 'active' : ''}" data-scenario="anomaly">
+                  Scenario C: Sensor Anomaly
+                </button>
+              </div>
+            </div>
+          `}
+
+          <!-- Prominent Dual NDIR CO2 Visualisation -->
+          <div class="co2-feature-card">
+            <div class="co2-feature-header">
+              <h2 class="co2-feature-title">Differential CO₂ Uptake (Inlet vs Outlet)</h2>
+              <span class="pill pill-normal mono">Dual NDIR Optical Sensing</span>
+            </div>
+            <div class="co2-visual-row">
+              <div class="co2-station">
+                <div class="co2-station-lbl">CO₂ INLET (ROOM AIR)</div>
+                <div class="co2-station-val mono">${isLive ? '--' : activeData.co2In}</div>
+                <div class="co2-station-unit">parts per million (ppm)</div>
+              </div>
+
+              <div class="co2-flow-arrow">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </div>
+
+              <div class="co2-reactor-center">
+                <div class="co2-reactor-title">Chlorella Culture</div>
+                <div class="co2-reactor-sub">Photosynthetic uptake & gas exchange</div>
+              </div>
+
+              <div class="co2-flow-arrow">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </div>
+
+              <div class="co2-station">
+                <div class="co2-station-lbl">CO₂ OUTLET (SCRUBBED)</div>
+                <div class="co2-station-val mono">${isLive ? '--' : activeData.co2Out}</div>
+                <div class="co2-station-unit">parts per million (ppm)</div>
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+              <div class="co2-disclaimer">
+                <strong>Measurement Context:</strong> The difference between inlet and outlet CO₂ concentrations helps us observe changes in the reactor's CO₂ removal performance over time. This ppm difference does not directly equal total mass captured; absolute mass uptake requires calibrated airflow rate measurements.
+              </div>
+              <div class="co2-diff-badge">
+                <div class="co2-diff-val mono">${isLive ? '--' : `${activeData.co2Out - activeData.co2In} ppm`}</div>
+                <span class="co2-diff-tag">DELTA OBSERVATION</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Multi-Parameter Sensor Grid -->
+          <h2 style="font-size:1.5rem; color:var(--color-dark-forest); margin-bottom:1rem;">
+            Environmental Sensor Readings
+          </h2>
+          <div class="sensor-readings-grid">
+            ${Object.entries(activeData.sensors).map(([key, s]) => `
+              <div class="sensor-card">
+                <div class="sensor-card-top">
+                  <div>
+                    <div class="sensor-name">${s.name}</div>
+                    <div class="sensor-probe-id mono">${s.probe}</div>
+                  </div>
+                  <span class="pill ${isLive ? 'pill-live-off' : s.pill}">${isLive ? 'Awaiting' : s.status}</span>
+                </div>
+                <div class="sensor-value-row">
+                  <span class="sensor-number">${isLive ? '--' : s.val}</span>
+                  <span class="sensor-unit">${s.unit}</span>
+                </div>
+                <div class="sensor-explanation">${s.note}</div>
+                <div class="sensor-sparkline-box">
+                  ${isLive ? '<div style="height:100%; display:flex; align-items:center; justify-content:center; font-size:0.75rem; color:#888;">No stream</div>' : renderSparklineSVG(s.history, s.status.includes('Alert') || s.status.includes('Flatlined'))}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+
+          <!-- Culture Health & AI Diagnostic Suite -->
+          <div class="dash-bottom-grid">
+            <!-- Culture Health -->
+            <div class="culture-health-card">
+              <h3 class="card-heading">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10H12V2z"/></svg>
+                Culture Health Snapshot
+              </h3>
+              <ul class="health-list">
+                <li class="health-item">
+                  <span class="health-lbl">Growth Trend</span>
+                  <span class="health-val mono ${currentScenario === 'stress' ? 'pill-warn' : 'pill-normal'}">${currentScenario === 'stress' ? 'Growth Trend Decelerating' : 'Growth Trend Increasing'}</span>
+                </li>
+                <li class="health-item">
+                  <span class="health-lbl">Photosynthetic Index</span>
+                  <span class="health-val mono">${currentScenario === 'stress' ? 'Diminished uptake' : 'Optimal'}</span>
+                </li>
+                <li class="health-item">
+                  <span class="health-lbl">pH Stability</span>
+                  <span class="health-val mono ${currentScenario === 'stress' ? 'pill-warn' : 'pill-normal'}">${currentScenario === 'stress' ? 'High Drift (9.2)' : 'Nominal (8.22)'}</span>
+                </li>
+                <li class="health-item">
+                  <span class="health-lbl">Medium Condition</span>
+                  <span class="health-val mono">BG-11 Fresh stock</span>
+                </li>
+              </ul>
+              <p style="font-size:0.84rem; color:var(--color-charcoal-light);">
+                <strong>Biological Reminder:</strong> Turbidity and optical colour indices are indirect optical indicators, not direct biomass dry-weight measurements. Laboratory filtration is required for calibration.
+              </p>
+            </div>
+
+            <!-- AI Intelligence Suite -->
+            <div class="ai-suite-card">
+              <h3 class="card-heading">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                BioFingerprint AI Suite (Provisional)
+              </h3>
+              <div class="ai-feature-group">
+                <div class="ai-feature">
+                  <div class="ai-feat-name">
+                    <span>A. BioFingerprint Baseline</span>
+                    <span class="mono" style="font-size:0.75rem; color:var(--color-forest-muted);">ADVISORY</span>
+                  </div>
+                  <div class="ai-feat-desc">${activeData.ai.biofingerprint}</div>
+                </div>
+
+                <div class="ai-feature">
+                  <div class="ai-feat-name">
+                    <span>B. Growth Trajectory Prediction</span>
+                    <span class="mono" style="font-size:0.75rem; color:var(--color-forest-muted);">MODELING</span>
+                  </div>
+                  <div class="ai-feat-desc">${activeData.ai.trajectory}</div>
+                </div>
+
+                <div class="ai-feature">
+                  <div class="ai-feat-name">
+                    <span>C. Root-Cause Assistant</span>
+                    <span class="mono" style="font-size:0.75rem; color:var(--color-forest-muted);">DIAGNOSTIC</span>
+                  </div>
+                  <div class="ai-feat-desc">${activeData.ai.rootCause}</div>
+                </div>
+
+                <div class="ai-feature">
+                  <div class="ai-feat-name">
+                    <span>D. Sensor Reliability Monitor</span>
+                    <span class="mono" style="font-size:0.75rem; color:var(--color-forest-muted);">INTEGRITY</span>
+                  </div>
+                  <div class="ai-feat-desc">${activeData.ai.reliability}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // 3. WHAT'S NEXT PAGE
+    function renderWhatsNextPage() {
+      // Retrieve stored maintenance dates
+      const lastInoculation = localStorage.getItem('eb_date_inoculation') || '2026-10-28';
+      const lastCleaning = localStorage.getItem('eb_date_cleaning') || '2026-11-05';
+      const lastReplenish = localStorage.getItem('eb_date_replenish') || '2026-11-10';
+      const nextInspection = localStorage.getItem('eb_date_next_inspect') || '2026-11-20';
+
+      return `
+        <div class="whats-next-page container">
+          <div style="margin-bottom:2rem;">
+            <span class="section-kicker">DECISION SUPPORT & ACTION CENTER</span>
+            <h1 style="font-size:2.4rem; color:var(--color-dark-forest); margin-bottom:0.5rem;">
+              What does my EcoBreathe need next?
+            </h1>
+            <p style="color:var(--color-charcoal-light); font-size:1.05rem;">
+              Intelligent preventative maintenance schedules, culture servicing dates, and the 4-month Vishwakarma development roadmap.
+            </p>
+          </div>
+
+          <!-- Prominent Recommended Action Banner -->
+          <div class="action-hero-banner">
+            <div class="action-hero-left">
+              <span class="action-priority-tag">
+                <span class="dot-indicator dot-green"></span>
+                PRIORITY: NORMAL MONITORING • DEMO SUGGESTION
+              </span>
+              <h2 class="action-hero-title">Continue Scheduled Optical Monitoring</h2>
+              <p class="action-hero-desc">
+                Current simulated sensor readings demonstrate stable photosynthetic equilibrium. Maintain standard daytime LED illumination schedule and inspect the transparent acrylic walls for early biofilm accumulation.
+              </p>
+              <ul class="action-checklist">
+                <li>Verify airflow bubbles through central airlift draft tube</li>
+                <li>Inspect FEP non-stick wall liner for cell adhesion</li>
+                <li>Check liquid level against the 21.0 L working volume marker</li>
+              </ul>
+            </div>
+            <div>
+              <a href="#/maintenance/EcoBreathe-01" class="btn btn-primary" data-route="#/maintenance/EcoBreathe-01">
+                Open Maintenance Passport
+              </a>
+            </div>
+          </div>
+
+          <!-- Maintenance Timeline Grid with Editable Dates -->
+          <div class="timeline-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+              <h3 style="font-size:1.45rem; color:var(--color-dark-forest);">
+                Culture Servicing Timeline
+              </h3>
+              <span class="pill pill-normal mono">LOCAL STORAGE PERSISTENCE</span>
+            </div>
+            <p style="font-size:0.88rem; color:var(--color-charcoal-light); margin-top:0.25rem;">
+              Distinguish between simple water top-ups and complete nutrient replenishments. Click any item to log or update dates.
+            </p>
+
+            <div class="timeline-items-grid">
+              <div class="timeline-item-box">
+                <div class="tl-title">Culture Inoculation</div>
+                <div class="tl-date mono" id="disp-inoculation">${lastInoculation}</div>
+                <div class="tl-desc">Initial Chlorella vulgaris starter culture in BG-11 medium.</div>
+              </div>
+
+              <div class="timeline-item-box">
+                <div class="tl-title">Previous Wall Wipe</div>
+                <div class="tl-date mono" id="disp-cleaning">${lastCleaning}</div>
+                <div class="tl-desc">Magnetic wiper pass along internal FEP film surface.</div>
+              </div>
+
+              <div class="timeline-item-box">
+                <div class="tl-title">Medium Replenishment</div>
+                <div class="tl-date mono" id="disp-replenish">${lastReplenish}</div>
+                <div class="tl-desc">Evaporation makeup water and trace BG-11 salt addition.</div>
+              </div>
+
+              <div class="timeline-item-box">
+                <div class="tl-title">Last Biomass Harvest</div>
+                <div class="tl-date mono">Not Yet Harvested</div>
+                <div class="tl-desc">Scheduled when optical turbidity exceeds target saturation.</div>
+              </div>
+
+              <div class="timeline-item-box" style="border-color:var(--color-primary-green);">
+                <div class="tl-title">Next Recommended Inspection</div>
+                <div class="tl-date mono" id="disp-inspect">${nextInspection}</div>
+                <div class="tl-desc">Routine check of pump diaphragm, diffuser porosity, and pH probe.</div>
+              </div>
+
+              <div class="timeline-item-box">
+                <div class="tl-title">Sensor Calibration Date</div>
+                <div class="tl-date mono">Provisional / In Progress</div>
+                <div class="tl-desc">Zero-point NDIR nitrogen flush and buffer pH 7.0/10.0 check.</div>
+              </div>
+            </div>
+
+            <!-- Quick Date Logger -->
+            <div style="background:var(--color-soft-cream); padding:1rem 1.25rem; border-radius:var(--radius-sm); border:1px solid var(--color-border); display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+              <span style="font-weight:600; font-size:0.88rem; color:var(--color-dark-forest);">Update Next Inspection Date:</span>
+              <input type="date" id="input-next-date" class="form-input" style="width:auto; padding:0.4rem 0.75rem;" value="${nextInspection}">
+              <button class="btn btn-secondary btn-sm" id="btn-save-inspect-date">Save Inspection Date</button>
+              <span id="date-save-msg" style="font-size:0.82rem; color:var(--color-dark-forest); font-weight:600; display:none;">Saved!</span>
+            </div>
+          </div>
+
+          <!-- 4-Month Development Roadmap -->
+          <div class="roadmap-section">
+            <span class="section-kicker">PROJECT LIFECYCLE</span>
+            <h3 style="font-size:1.5rem; color:var(--color-dark-forest); margin-bottom:0.5rem;">
+              Four-Month Development Roadmap
+            </h3>
+            <p style="font-size:0.92rem; color:var(--color-charcoal-light);">
+              Vishwakarma Awards 2026–27 milestones. Progress states reflect our genuine development status.
+            </p>
+
+            <div class="roadmap-phases-grid">
+              <!-- Month 1 -->
+              <div class="roadmap-phase-card">
+                <span class="phase-badge phase-complete mono">COMPLETED</span>
+                <h4 class="phase-title">MONTH 1 • DESIGN FREEZE</h4>
+                <ul class="phase-tasks">
+                  <li>Finalise solar canopy, acrylic wall thickness and structural base</li>
+                  <li>Obtain supplier quotes and order optical sensors and MCU parts</li>
+                  <li>Inoculate and maintain live Chlorella and Neochloris in BG-11</li>
+                </ul>
+              </div>
+
+              <!-- Month 2 -->
+              <div class="roadmap-phase-card" style="border-color:var(--color-primary-green);">
+                <span class="phase-badge phase-progress mono">IN PROGRESS</span>
+                <h4 class="phase-title">MONTH 2 • FABRICATION</h4>
+                <ul class="phase-tasks">
+                  <li>Build 300 mm cubic acrylic tank, frame and solar canopy brackets</li>
+                  <li>Fit internal FEP liner, bottom diffuser, and airlift draft tube</li>
+                  <li>Conduct 48-hour water-only hydrostatic leak test</li>
+                </ul>
+              </div>
+
+              <!-- Month 3 -->
+              <div class="roadmap-phase-card">
+                <span class="phase-badge phase-upcoming mono">UPCOMING</span>
+                <h4 class="phase-title">MONTH 3 • INTEGRATION</h4>
+                <ul class="phase-tasks">
+                  <li>Integrate ESP32 sensor board and IP65 waterproof enclosure</li>
+                  <li>Calibrate dual NDIR CO₂ probes and analog pH sensor buffers</li>
+                  <li>Deploy real-time Wi-Fi dashboard telemetry firmware</li>
+                </ul>
+              </div>
+
+              <!-- Month 4 -->
+              <div class="roadmap-phase-card">
+                <span class="phase-badge phase-upcoming mono">UPCOMING</span>
+                <h4 class="phase-title">MONTH 4 • VALIDATION</h4>
+                <ul class="phase-tasks">
+                  <li>Conduct continuous 21-day closed culture trial run</li>
+                  <li>Collect empirical CO₂ inlet/outlet differentials and dry biomass</li>
+                  <li>Conduct 7-day outdoor solar endurance and thermal test</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // 4. MAINTENANCE PASSPORT & QR CODE
+    function renderMaintenancePage(panelId) {
+      const storageKey = `eb_maint_logs_${panelId}`;
+      const existingLogs = JSON.parse(localStorage.getItem(storageKey) || 'null') || [
+        { id: 1, date: '2026-11-08 14:30', activity: 'Inspected Air Tubing & Diffuser', tech: 'Lead Tech (Roli)', notes: 'Diaphragm pump flow rate verified. No back-siphon observed.' },
+        { id: 2, date: '2026-11-04 10:15', activity: 'Cleaned Reactor Walls (Magnetic Wiper)', tech: 'Junior Operator', notes: 'Wiped internal FEP liner; light transmittance restored.' },
+        { id: 3, date: '2026-10-28 09:00', activity: 'Inoculated Culture', tech: 'Biotech Team', notes: 'Added 2.0 L Chlorella inoculum into 19.0 L fresh BG-11.' }
+      ];
+
+      return `
+        <div class="maint-page container">
+          <div style="margin-bottom:2rem;">
+            <span class="section-kicker">DIGITAL PASSPORT & SERVICING LEDGER</span>
+            <h1 style="font-size:2.4rem; color:var(--color-dark-forest); margin-bottom:0.5rem;">
+              Maintenance Passport — ${panelId}
+            </h1>
+            <p style="color:var(--color-charcoal-light); font-size:1.02rem;">
+              Scan on-site with any smartphone camera to review panel specifications, sensor health, and technician servicing histories.
+            </p>
+          </div>
+
+          <div class="maint-two-col">
+            <!-- Left Column: QR Code & Reactor Passport -->
+            <div>
+              <div class="maint-card">
+                <h3 style="font-size:1.35rem; color:var(--color-dark-forest);">
+                  Unit QR Digital Passport
+                </h3>
+                <div class="qr-box-center">
+                  <div class="qr-canvas-holder">
+                    <canvas id="panel-qr-canvas"></canvas>
+                  </div>
+                  <div class="qr-scan-hint mono">
+                    PANEL: ${panelId} • DIRECT URL ENCODED
+                  </div>
+                  <button class="btn btn-secondary btn-sm" id="btn-download-qr" style="margin-top:1rem;">
+                    Download QR Code (.PNG)
+                  </button>
+                </div>
+              </div>
+
+              <div class="maint-card">
+                <h3 style="font-size:1.35rem; color:var(--color-dark-forest); margin-bottom:1rem;">
+                  Reactor Physical Specifications
+                </h3>
+                <table class="specs-table" style="width:100%;">
+                  <tbody>
+                    <tr><th>Panel Serial</th><td class="mono">${panelId}-2026-VISHWA</td></tr>
+                    <tr><th>Culture Volume</th><td class="mono">21.0 Litres (Working)</td></tr>
+                    <tr><th>Chamber Dimensions</th><td class="mono">300 × 300 × 300 mm Acrylic</td></tr>
+                    <tr><th>Organism Strain</th><td>Chlorella vulgaris (BG-11)</td></tr>
+                    <tr><th>Inoculation Age</th><td class="mono" id="culture-age-calc">16 Days since inoculation</td></tr>
+                    <tr><th>Biofilm Defense</th><td>Internal FEP Liner + Wiper</td></tr>
+                    <tr><th>Power Source</th><td>Dual Solar Canopy + 12V DC</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Right Column: Log Activity Form & History Ledger -->
+            <div>
+              <div class="maint-card">
+                <h3 style="font-size:1.35rem; color:var(--color-dark-forest); margin-bottom:0.35rem;">
+                  Log Maintenance Activity
+                </h3>
+                <p style="font-size:0.88rem; color:var(--color-charcoal-light); margin-bottom:1.25rem;">
+                  Record an intervention. Entries are recorded in the local digital passport.
+                </p>
+
+                <form id="form-log-maintenance">
+                  <div class="form-group">
+                    <label class="form-label" for="maint-activity">Servicing Action</label>
+                    <select id="maint-activity" class="form-select" required>
+                      <option value="Cleaned reactor walls with magnetic wiper">Cleaned reactor walls with magnetic wiper</option>
+                      <option value="Inspected air tubing and diffuser">Inspected air tubing and diffuser</option>
+                      <option value="Replenished medium / evaporation top-up">Replenished medium / evaporation top-up</option>
+                      <option value="Collected culture sample for optical analysis">Collected culture sample for optical analysis</option>
+                      <option value="Performed biomass partial harvesting">Performed biomass partial harvesting</option>
+                      <option value="Calibrated sensor probe">Calibrated sensor probe</option>
+                    </select>
+                  </div>
+
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                    <div class="form-group">
+                      <label class="form-label" for="maint-date">Date & Time</label>
+                      <input type="datetime-local" id="maint-date" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="maint-tech">Technician Name</label>
+                      <input type="text" id="maint-tech" class="form-input" placeholder="e.g. Roli (Lead Tech)" required>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="form-label" for="maint-notes">Field Notes / Observations (Optional)</label>
+                    <textarea id="maint-notes" class="form-textarea" placeholder="Note bubble density, optical clarity, or sensor responses..."></textarea>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary" style="width:100%;">
+                    Submit & Save to Digital Passport
+                  </button>
+                </form>
+              </div>
+
+              <!-- History Ledger -->
+              <div class="maint-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+                  <h3 style="font-size:1.35rem; color:var(--color-dark-forest);">
+                    Maintenance History (${panelId})
+                  </h3>
+                  <span class="pill pill-normal mono" id="maint-count-badge">${existingLogs.length} LOGS</span>
+                </div>
+
+                <ul class="history-log-list" id="maint-log-list">
+                  ${existingLogs.map(l => `
+                    <li class="history-item">
+                      <div class="history-header">
+                        <span class="history-act">${l.activity}</span>
+                        <span class="history-date">${l.date}</span>
+                      </div>
+                      ${l.notes ? `<div class="history-notes">${l.notes}</div>` : ''}
+                      <div class="history-by">Technician: ${l.tech}</div>
+                    </li>
+                  `).join('')}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // 5. LOGIN PAGE
+    function renderLoginPage() {
+      return `
+        <div class="login-wrapper">
+          <div class="login-card">
+            <div class="login-brand-header">
+              <div class="brand-icon" style="margin:0 auto 0.75rem auto; width:44px; height:44px;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M12 2v8"/><path d="M4 10a8 8 0 0 0 16 0V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v4z"/>
+                </svg>
+              </div>
+              <h1 class="login-title">Lab Sign In</h1>
+              <p class="login-subtitle">EcoBreathe Liquid Tree IoT Portal</p>
+            </div>
+
+            <form id="login-form">
+              <div class="form-group">
+                <label class="form-label" for="login-email">Email Address</label>
+                <input type="email" id="login-email" class="form-input" placeholder="technician@ecobreathe.org" value="tech@ecobreathe.org" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="login-pass">Password</label>
+                <input type="password" id="login-pass" class="form-input" placeholder="••••••••" value="vishwakarma2026" required>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="login-role">Select Access Role</label>
+                <select id="login-role" class="form-select">
+                  <option value="Administrator">Administrator (Hardware Calibration & Config)</option>
+                  <option value="Operator / Maintenance Staff" selected>Operator / Maintenance Staff</option>
+                  <option value="Viewer">Viewer (Read-only Telemetry)</option>
+                </select>
+              </div>
+
+              <div class="login-checkbox-row">
+                <label class="login-checkbox-label">
+                  <input type="checkbox" id="login-remember" checked>
+                  <span>Remember me</span>
+                </label>
+                <a href="#/" class="login-forgot-link" onclick="alert('Demo notice: Contact project administrators to reset credentials.'); return false;">Forgot password?</a>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width:100%; margin-bottom:0.75rem;">
+                Sign In to Dashboard
+              </button>
+
+              <a href="#/" class="btn btn-secondary" style="width:100%;" data-route="#/">
+                Return to Home
+              </a>
+            </form>
+
+            <div class="login-demo-notice">
+              <strong>Evaluation Demonstration:</strong> This is a frontend demonstration screen for the Vishwakarma Awards 2026–27 jury. No server credentials or backend authentication are exposed.
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // ==================== ROUTING SYSTEM ====================
+
+    function getHashPath() {
+      const hash = window.location.hash || '#/';
+      return hash.startsWith('#') ? hash : `#${hash}`;
+    }
+
+    function renderRoute() {
+      const path = getHashPath();
+      const appRoot = document.getElementById('app-root');
+      window.scrollTo(0, 0);
+
+      // Highlight active navigation links
+      document.querySelectorAll('.nav-link').forEach(link => {
+        const routeAttr = link.getAttribute('data-route');
+        if (routeAttr === path || (path.startsWith('#/maintenance') && routeAttr.startsWith('#/maintenance'))) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+
+      // Route matching
+      if (path === '#/' || path === '' || path === '#') {
+        appRoot.innerHTML = renderHomePage();
+        attachHomeHandlers();
+      } else if (path === '#/conditions') {
+        appRoot.innerHTML = renderConditionsPage();
+        attachConditionsHandlers();
+      } else if (path === '#/whats-next') {
+        appRoot.innerHTML = renderWhatsNextPage();
+        attachWhatsNextHandlers();
+      } else if (path.startsWith('#/maintenance')) {
+        const panelId = path.split('/')[2] || 'EcoBreathe-01';
+        appRoot.innerHTML = renderMaintenancePage(panelId);
+        attachMaintenanceHandlers(panelId);
+      } else if (path === '#/login') {
+        appRoot.innerHTML = renderLoginPage();
+        attachLoginHandlers();
+      } else {
+        // Fallback to home
+        appRoot.innerHTML = renderHomePage();
+        attachHomeHandlers();
+      }
+    }
+
+    // Intercept clicks on links with data-route
+    document.addEventListener('click', e => {
+      const target = e.target.closest('[data-route]');
+      if (target) {
+        const targetRoute = target.getAttribute('data-route');
+        if (targetRoute && targetRoute.startsWith('#')) {
+          e.preventDefault();
+          window.location.hash = targetRoute;
+        }
+      }
+    });
+
+    window.addEventListener('hashchange', renderRoute);
+    window.addEventListener('DOMContentLoaded', renderRoute);
+
+    // ==================== PAGE HANDLERS ====================
+
+    function attachHomeHandlers() {
+      const exploreBtn = document.getElementById('btn-explore-reactor');
+      if (exploreBtn) {
+        exploreBtn.addEventListener('click', e => {
+          e.preventDefault();
+          const target = document.getElementById('reactor-drawing');
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      }
+    }
+
+    function attachConditionsHandlers() {
+      // Toggle Demo vs Live
+      const btnDemo = document.getElementById('btn-mode-demo');
+      const btnLive = document.getElementById('btn-mode-live');
+      if (btnDemo) {
+        btnDemo.addEventListener('click', () => {
+          currentMode = 'demo';
+          renderRoute();
+        });
+      }
+      if (btnLive) {
+        btnLive.addEventListener('click', () => {
+          currentMode = 'live';
+          renderRoute();
+        });
+      }
+
+      // Scenario selector
+      document.querySelectorAll('[data-scenario]').forEach(btn => {
+        btn.addEventListener('click', e => {
+          currentScenario = e.currentTarget.getAttribute('data-scenario');
+          renderRoute();
+        });
+      });
+    }
+
+    function attachWhatsNextHandlers() {
+      const saveBtn = document.getElementById('btn-save-inspect-date');
+      const inputDate = document.getElementById('input-next-date');
+      const dispInspect = document.getElementById('disp-inspect');
+      const dateSaveMsg = document.getElementById('date-save-msg');
+
+      if (saveBtn && inputDate) {
+        saveBtn.addEventListener('click', () => {
+          const val = inputDate.value;
+          if (val) {
+            localStorage.setItem('eb_date_next_inspect', val);
+            if (dispInspect) dispInspect.textContent = val;
+            if (dateSaveMsg) {
+              dateSaveMsg.style.display = 'inline';
+              setTimeout(() => { dateSaveMsg.style.display = 'none'; }, 2500);
+            }
+          }
+        });
+      }
+    }
+
+    function attachMaintenanceHandlers(panelId) {
+      // Generate real QR code
+      const canvas = document.getElementById('panel-qr-canvas');
+      if (canvas && typeof QRCode !== 'undefined') {
+        const urlToEncode = `${window.location.origin}${window.location.pathname}#/maintenance/${panelId}`;
+        QRCode.toCanvas(canvas, urlToEncode, {
+          width: 190,
+          margin: 1,
+          color: {
+            dark: '#174B32',
+            light: '#FFFFFF'
+          }
+        }, err => {
+          if (err) console.error('QR code generation error:', err);
+        });
+      }
+
+      // Download QR code button
+      const downloadBtn = document.getElementById('btn-download-qr');
+      if (downloadBtn && canvas) {
+        downloadBtn.addEventListener('click', () => {
+          const a = document.createElement('a');
+          a.download = `${panelId}_maintenance_passport.png`;
+          a.href = canvas.toDataURL('image/png');
+          a.click();
+        });
+      }
+
+      // Set default datetime to now
+      const dateInput = document.getElementById('maint-date');
+      if (dateInput) {
+        const now = new Date();
+        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+        dateInput.value = now.toISOString().slice(0, 16);
+      }
+
+      // Maintenance submission form
+      const maintForm = document.getElementById('form-log-maintenance');
+      if (maintForm) {
+        maintForm.addEventListener('submit', e => {
+          e.preventDefault();
+          const activity = document.getElementById('maint-activity').value;
+          const dateVal = document.getElementById('maint-date').value.replace('T', ' ');
+          const tech = document.getElementById('maint-tech').value;
+          const notes = document.getElementById('maint-notes').value;
+
+          const storageKey = `eb_maint_logs_${panelId}`;
+          const currentLogs = JSON.parse(localStorage.getItem(storageKey) || 'null') || [
+            { id: 1, date: '2026-11-08 14:30', activity: 'Inspected Air Tubing & Diffuser', tech: 'Lead Tech (Roli)', notes: 'Diaphragm pump flow rate verified. No back-siphon observed.' },
+            { id: 2, date: '2026-11-04 10:15', activity: 'Cleaned Reactor Walls (Magnetic Wiper)', tech: 'Junior Operator', notes: 'Wiped internal FEP liner; light transmittance restored.' },
+            { id: 3, date: '2026-10-28 09:00', activity: 'Inoculated Culture', tech: 'Biotech Team', notes: 'Added 2.0 L Chlorella inoculum into 19.0 L fresh BG-11.' }
+          ];
+
+          const newLog = {
+            id: Date.now(),
+            date: dateVal,
+            activity: activity,
+            tech: tech,
+            notes: notes
+          };
+
+          currentLogs.unshift(newLog);
+          localStorage.setItem(storageKey, JSON.stringify(currentLogs));
+
+          // Re-render maintenance page to display updated logs
+          renderRoute();
+        });
+      }
+    }
+
+    function attachLoginHandlers() {
+      const loginForm = document.getElementById('login-form');
+      if (loginForm) {
+        loginForm.addEventListener('submit', e => {
+          e.preventDefault();
+          const role = document.getElementById('login-role').value;
+          currentUserRole = role;
+          localStorage.setItem('ecobreathe_user_role', role);
+          alert(`Authentication successful (Demonstration Mode).\nSigned in as: ${role}.\nRedirecting to Current Conditions dashboard...`);
+          window.location.hash = '#/conditions';
+        });
+      }
+    }
+  </script>
+</body>
+</html>
